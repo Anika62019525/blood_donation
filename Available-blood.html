@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Blood Bank - Availability Search</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f8f9fa;
+            background-image: url(/blood-donation-charity-website-tempalte/assets/images/gallery/available-background.jpg);
+        }
+
+        header {
+            background-color: #343a40;
+            color: white;
+            padding: 1rem;
+            text-align: center;
+        }
+
+        main {
+            max-width: 800px;
+            margin: 20px auto;
+            padding: 20px;
+            background-color: rgb(241, 146, 146);
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        form {
+            display: grid;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        label {
+            font-weight: bold;
+        }
+
+        input, select, button {
+            padding: 10px;
+            border: 1px solid #ced4da;
+            border-radius: 4px;
+            font-size: 16px;
+        }
+
+        button {
+            background-color: #007bff;
+            color: white;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #0056b3;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        th, td {
+            border: 1px solid #dee2e6;
+            padding: 12px;
+            text-align: left;
+        }
+
+        th {
+            background-color: #007bff;
+            color: white;
+        }
+
+        @media (max-width: 600px) {
+            th, td {
+                display: block;
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<header>
+    <h1>Blood Bank - Availability Search</h1>
+</header>
+
+<main>
+    <form id="bloodForm">
+        <label for="name">Name:</label>
+        <input type="text" id="name" placeholder="Enter name">
+
+        <label for="bloodType">Blood Type:</label>
+        <select id="bloodType">
+            <option value="A+">A+</option>
+            <option value="B+">B+</option>
+            <option value="O+">B+</option>
+            <option value="O-">B+</option>
+            <!-- Add more options for other blood types if needed -->
+        </select>
+
+        <label for="location">Location:</label>
+        <input type="text" id="location" placeholder="Enter location">
+
+        <button type="button" onclick="addPerson()">Add Person</button>
+    </form>
+
+    <label for="search">Search:</label>
+    <input type="text" id="search" placeholder="Enter name or location">
+    <button type="button" onclick="searchBlood()">Search</button>
+
+    <table id="resultTable">
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Blood Type</th>
+                <th>Location</th>
+            </tr>
+        </thead>
+        <tbody id="resultTableBody">
+            <!-- Results will be displayed here -->
+        </tbody>
+    </table>
+</main>
+
+<script>
+    // Generate more than 40 dummy entries
+    const dummyData = Array.from({ length: 0 }, (_, index) => ({
+        name: `Person ${index + 1}`,
+        bloodType: index % 2 === 0 ? 'A+' : 'B+',
+        location: `City ${index % 5 + 1}`,
+    }));
+
+    function displayResults(data) {
+        const tableBody = document.getElementById("resultTableBody");
+        tableBody.innerHTML = "";
+
+        data.forEach(entry => {
+            const row = tableBody.insertRow();
+            const nameCell = row.insertCell(0);
+            const bloodTypeCell = row.insertCell(1);
+            const locationCell = row.insertCell(2);
+
+            nameCell.textContent = entry.name;
+            bloodTypeCell.textContent = entry.bloodType;
+            locationCell.textContent = entry.location;
+        });
+    }
+
+    function searchBlood() {
+        const searchValue = document.getElementById("search").value.toLowerCase();
+
+        // Simulate an API call or database query
+        const filteredData = dummyData.filter(entry =>
+            entry.name.toLowerCase().includes(searchValue) || entry.location.toLowerCase().includes(searchValue)
+        );
+
+        displayResults(filteredData);
+    }
+
+    function addPerson() {
+        const name = document.getElementById("name").value;
+        const bloodType = document.getElementById("bloodType").value;
+        const location = document.getElementById("location").value;
+
+        // Validate inputs
+        if (name && bloodType && location) {
+            const newPerson = { name, bloodType, location };
+            dummyData.push(newPerson);
+            displayResults(dummyData);
+
+            // Clear the form
+            document.getElementById("bloodForm").reset();
+        } else {
+            alert("Please fill in all fields");
+        }
+    }
+</script>
+</body>
+</html>
